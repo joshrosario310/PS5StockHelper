@@ -11,6 +11,7 @@ import sys
 import threading
 import time
 import webbrowser
+import requests
 
 # Local application imports
 from AppUtils import parse_args, setup_logger
@@ -18,7 +19,7 @@ from AudioNotifier import AudioNotifier
 from Emailer import Emailer
 from LbabinzTracker import LbabinzTracker
 from NowInStockTracker import NowInStockTracker
-
+import discord
 
 # Globals
 logger = logging.getLogger(__name__)
@@ -40,10 +41,16 @@ def stock_check_callback(audio_notifier, emailer, result):
     logger.info(result.info)
     for link in result.links:
         webbrowser.open(link)
+        # Send Discord webhook
+        data = {"content": link}
+        response = requests.post(discord.server, json=data)
     if audio_notifier:
         audio_notifier.start_audio()
     if emailer:
         emailer.send_drop_message(result)
+    # Send Discord webhook
+    data = {"content": result.info}
+    response = requests.post(discord.server, json=data)
 
 
 def main():
