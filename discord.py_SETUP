@@ -1,0 +1,7 @@
+#!/usr/bin/python
+
+# To log to a Discord server
+# Change this file name to "discord.py" after setting the server URL below
+
+# Webhook URL from Discord server
+server = ""
